@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>RaidPopup</RootNamespace>
+    <AssemblyName>RaidPopup</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <LangVersion>7.3</LangVersion>
+    <!-- Clean output -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\dist\BepInEx\plugins\RaidPopup\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\dist\BepInEx\plugins\RaidPopup\</OutputPath>
+  </PropertyGroup>
+
+  <!-- SPT installation path -->
+  <PropertyGroup>
+    <SPTPath>C:\SPT</SPTPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="RaidPopupPlugin.cs" />
+    <Compile Include="UI\RaidNotificationPanel.cs" />
+    <Compile Include="Models\ActiveRaid.cs" />
+    <Compile Include="Patches\StartRaidNotificationPatch.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <!-- Reference assemblies from SPT installation (Private=false prevents copying) -->
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(SPTPath)\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>$(SPTPath)\BepInEx\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Comfort">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Comfort.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="spt-common">
+      <HintPath>$(SPTPath)\BepInEx\plugins\spt\spt-common.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System"><Private>false</Private></Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(SPTPath)\EscapeFromTarkov_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <!-- Clean up unwanted files -->
+  <Target Name="CleanupOutput" AfterTargets="Build">
+    <ItemGroup>
+      <FilesToDelete Include="$(OutputPath)System.*.dll" />
+      <FilesToDelete Include="$(OutputPath)*.pdb" />
+      <FilesToDelete Include="$(OutputPath)*.config" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+  </Target>
+
+  <!-- Optional: Copy to SPT for testing -->
+  <Target Name="CopyToSPT" AfterTargets="CleanupOutput" Condition="Exists('$(SPTPath)')">
+    <Copy SourceFiles="$(OutputPath)RaidPopup.dll" DestinationFolder="$(SPTPath)\BepInEx\plugins\RaidPopup" />
+  </Target>
+</Project>
