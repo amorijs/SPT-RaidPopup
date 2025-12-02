@@ -2,7 +2,7 @@
 
 A client-side mod for **SPT 4.0 + Fika** that displays a popup notification when other players start a raid.
 
-![RaidPopup Screenshot](screenshot.png)
+<img width="1377" height="566" alt="image" src="https://github.com/user-attachments/assets/b5c91a3e-351a-4e10-ab3a-d822ddb6451f" />
 
 ## Features
 
